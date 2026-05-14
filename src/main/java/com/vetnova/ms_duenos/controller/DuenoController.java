@@ -1,4 +1,5 @@
 package com.vetnova.ms_duenos.controller;
+
 import com.vetnova.ms_duenos.model.Dueno;
 import com.vetnova.ms_duenos.service.DuenoService;
 import jakarta.validation.Valid;
@@ -16,13 +17,28 @@ public class DuenoController {
     private DuenoService duenoService;
 
     @PostMapping("/registro")
-    public ResponseEntity<Dueno> registrar(@Valid @RequestBody Dueno d) {
-        Dueno nuevo = duenoService.guardarDueno(d);
-        return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
+    public ResponseEntity<?> registrar(@Valid @RequestBody Dueno dueno) {
+        try {
+            Dueno nuevo = duenoService.registrarDueno(dueno);
+            return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error: El RUT ingresado ya está registrado o el formato es incorrecto.", HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("/listar")
     public ResponseEntity<List<Dueno>> listar() {
-        return ResponseEntity.ok(duenoService.obtenerTodos());
+        return ResponseEntity.ok(duenoService.listarTodos());
+    }
+
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<Dueno> actualizar(@PathVariable Long id, @Valid @RequestBody Dueno dueno) {
+        return ResponseEntity.ok(duenoService.actualizar(id, dueno));
+    }
+
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<String> eliminar(@PathVariable Long id) {
+        duenoService.eliminar(id);
+        return ResponseEntity.ok("Dueño eliminado correctamente.");
     }
 }
