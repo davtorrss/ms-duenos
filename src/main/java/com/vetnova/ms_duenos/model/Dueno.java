@@ -2,11 +2,15 @@ package com.vetnova.ms_duenos.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Data
 @Table(name = "duenos")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Dueno {
 
     @Id
@@ -23,7 +27,7 @@ public class Dueno {
     private String nombre;
 
     @NotBlank(message = "El teléfono es obligatorio")
-    @Pattern(regexp = "^9\\d{8}$", message = "El teléfono debe empezar con 9 y tener 9 dígitos (ej: 912345678)")
+    @Pattern(regexp = "^9\\d{8}$", message = "El teléfono debe empezar con 9 y tener 9 dígitos")
     private String telefono;
 
     private String direccion;
