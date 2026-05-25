@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DuenoRepository extends JpaRepository<Dueno, Long> {
-    // JpaRepository ya incluye findById por defecto
+    
 }
