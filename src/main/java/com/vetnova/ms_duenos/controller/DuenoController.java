@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 @RestController
@@ -22,7 +24,7 @@ public class DuenoController {
 
     @PostMapping
     public ResponseEntity<DuenoResponseDTO> crear(
-            @RequestBody DuenoRequestDTO dto) {
+            @Valid @RequestBody DuenoRequestDTO dto) {
 
         return new ResponseEntity<>(
                 duenoService.registrar(dto),
@@ -47,7 +49,7 @@ public class DuenoController {
     @PutMapping("/{id}")
     public ResponseEntity<DuenoResponseDTO> actualizar(
             @PathVariable Long id,
-            @RequestBody DuenoRequestDTO dto) {
+            @Valid @RequestBody DuenoRequestDTO dto) {
 
         return ResponseEntity.ok(
                 duenoService.actualizar(id, dto));
@@ -60,6 +62,6 @@ public class DuenoController {
         duenoService.eliminar(id);
 
         return ResponseEntity.ok(
-                "Dueño eliminado exitosamente.");
+                "Dueño eliminado correctamente");
     }
 }
