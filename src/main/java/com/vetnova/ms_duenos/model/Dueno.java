@@ -22,7 +22,7 @@ public class Dueno {
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Column(nullable = false, length = 9)
+    @Column(nullable = false, length = 15)
     private String telefono;
 
     private String direccion;

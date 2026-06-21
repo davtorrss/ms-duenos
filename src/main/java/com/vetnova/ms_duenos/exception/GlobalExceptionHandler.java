@@ -1,44 +1,46 @@
 package com.vetnova.ms_duenos.exception;
 
-import java.util.HashMap;
-import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@Slf4j
+import java.util.HashMap;
+import java.util.Map;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuenoNoEncontradoException.class)
-    public ResponseEntity<String> manejarDuenoNoEncontrado(DuenoNoEncontradoException ex) {
-        log.warn("Recurso no encontrado: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    public ResponseEntity<Map<String, String>> handleDuenoNoEncontrado(DuenoNoEncontradoException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RutDuplicadoException.class)
-    public ResponseEntity<String> manejarRutDuplicado(RutDuplicadoException ex) {
-        log.warn("Conflicto de negocio: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    public ResponseEntity<Map<String, String>> handleRutDuplicado(RutDuplicadoException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> manejarValidaciones(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error -> {
-            errores.put(error.getField(), error.getDefaultMessage());
-        });
-        log.warn("Error de validación de campos DTO: {}", errores);
-        return ResponseEntity.badRequest().body(errores);
+        ex.getBindingResult().getFieldErrors().forEach(error -> 
+            errores.put(error.getField(), error.getDefaultMessage())
+        );
+        return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
+    // ¡EL DETECTIVE! Este método atrapará el error mudo y lo mostrará en Swagger
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> manejarErrorGeneral(Exception ex) {
-        log.error("Excepción interna del servidor: ", ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Ocurrió un error interno: " + ex.getMessage());
+    public ResponseEntity<Map<String, String>> handleGeneralErrors(Exception ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error_interno", ex.getMessage());
+        error.put("posible_causa", ex.getCause() != null ? ex.getCause().getMessage() : "Desconocida");
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
