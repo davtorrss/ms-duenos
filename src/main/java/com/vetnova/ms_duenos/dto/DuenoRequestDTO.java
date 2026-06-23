@@ -21,7 +21,7 @@ public class DuenoRequestDTO {
     private String nombre;
 
     @NotBlank(message = "El teléfono es obligatorio.")
-    @Pattern(regexp = "^\\+?56[9]\\d{8}$", message = "El teléfono debe cumplir con el formato chileno (+56912345678)")
+    @Pattern(regexp = "^\\+569\\d{8}$", message = "El teléfono debe cumplir estrictamente con el formato chileno (+56912345678)")
     private String telefono;
 
     @NotBlank(message = "La dirección es obligatoria.")

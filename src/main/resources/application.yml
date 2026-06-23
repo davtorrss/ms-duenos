@@ -5,9 +5,9 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/db_vetnova_duenos?useSSL=false&serverTimezone=UTC
     username: root
-    password: 
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
-jjpa:
+  jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
@@ -19,3 +19,7 @@ jjpa:
 logging:
   level:
     com.vetnova.ms_duenos: INFO
+
+
+jwt:
+  secret: "vetnova_super_secret_key_1234567890_vetnova_super_secret_key"
